@@ -6,9 +6,9 @@ function plotspeed_shaderr_PVALrollingSepCRV_AGM
 
 
 % clean up workspace
-clc; clear; close all;
+clc; close all;
 
-FramesToHours = 4;
+FramesToHours = 1;
 TimeWindow = FramesToHours; % analyze this frequently (i.e. hours)
 ImageArea = .900*.900; % mm^2
 % FigNameDMSO='DMSO 1000c ProlifPlot E18';
@@ -51,11 +51,11 @@ for i = 1:length(FileNames)
     maxTime = size(storeX,2);
     
     % calculate speeds
-    velX=storeX(:,(1+TimeWindow):1:end)-...
-            storeX(:,1:1:end-TimeWindow);
+    velX=4*(storeX(:,(1+TimeWindow):1:end)-...
+            storeX(:,1:1:end-TimeWindow));
      
-    velY=storeY(:,(1+TimeWindow):1:end)-...
-            storeY(:,1:1:end-TimeWindow);
+    velY=4*(storeY(:,(1+TimeWindow):1:end)-...
+            storeY(:,1:1:end-TimeWindow));
     
     velR = sqrt(velX.*velX + velY.*velY);
             
@@ -123,6 +123,7 @@ condition77{4,1} = RepMat;
     ConditionNameMat = {'OHT1000','DMSO1000','OHT500','DMSO500'};
     for totalcounter = 1:numel(condition77)
         close all
+        %figure;
     RepMat = condition77{totalcounter,1};
     
     mycounter = 0;
@@ -261,7 +262,7 @@ title(strcat('',{' '},ConditionNameMat(totalcounter)),'fontsize',11);
     
 %     xlswrite(char(strcat('Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\Updated Graphics (6-30)\Proliferation Plots\PValVel63018GFGM',ConditionNameMat(totalcounter))),SignificanceStore);
     
-      figname=char(strcat('Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\Updated Graphics (6-30)\Proliferation Plots (4)\PracticeVelPlot70918AGM',ConditionNameMat(totalcounter)));
+      figname=char(strcat('Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\Replicate Selection (5-11)\Output Graphics 11-10 (difWind)\VelPlotAGM_1frame',ConditionNameMat(totalcounter)));
          set(gcf, 'PaperUnits', 'centimeters');
          set(gcf, 'PaperPosition', [0 0 6.2 10.57]);
          subplot(2,1,1); set(gca,'XMinorTick','on','YMinorTick','on');
@@ -271,8 +272,8 @@ title(strcat('',{' '},ConditionNameMat(totalcounter)),'fontsize',11);
          ax = gca;
          ax.LineWidth = 1;
          set(gcf, 'PaperPosition', [0 0 6.2 10.57]);
-         %saveas(gcf,figname,'epsc');
-         %print('-dtiff','-r1000',figname)
+         saveas(gcf,figname,'epsc');
+         print('-dtiff','-r1000',figname)
              
     end
 end
