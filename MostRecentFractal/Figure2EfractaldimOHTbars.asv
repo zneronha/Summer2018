@@ -116,10 +116,6 @@ powerFitmin = (q3(1,1)).*X.^(q3(1,2));
 plot(X,powerFitmin,'b-','Linewidth',2);
 
 %Plot fractal dimension of 1.5 & 2
-powerFit15 = (f.a).*X.^((1/1.5));
-powerFit20 = (f.a).*X.^((1/2));
-plot(X,powerFit15,'r-','Linewidth',2);
-plot(X,powerFit20,'r-','Linewidth',2);
 
 set(gca,'XScale','log','YScale','log')
 ylim([5 inf]);
