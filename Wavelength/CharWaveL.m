@@ -197,9 +197,9 @@ ft1 = fittype('A*(x^B)',...
      'dependent',{'y'},'independent',{'x'},...
      'coefficients',{'A', 'B'});
  [cf,G] = fit(xa,ya,ft1,fo1)
- %hello = plot(cf);
- %hello.LineWidth = 2;
- %hello.Color = [0 0 0];
+ hello = plot(cf);
+ hello.LineWidth = 2;
+ hello.Color = [0 0 0];
 
     
 set(gca, 'XScale', 'lin')

@@ -154,12 +154,24 @@ for condnum = 1:numel(AssayOHT);
         calcMeanMSD(f(fearly),2),'power1')
     
     %fit to biased diffusion model...
-    F3 = @(z,t)z(1)*((z(2)*t)-(z(2)^2)*(1-exp(-t/z(2))));
-    z0 = [1000,0.1];
-    %options=optimset('disp','iter','LargeScale','off','TolFun',.001,'MaxIter',100000,'MaxFunEvals',100000);
-    [z,resnorm,~,exitflag,output] = lsqcurvefit(F3,z0,calcMeanMSD(f(fearly),2),...
-        calcMeanMSD(f(fearly),1))
-    
+    F3 = @(z,tdat)z(1)*((z(2)*tdat)-(z(2)^2)*(1-exp(-tdat/z(2))));
+    z0 = [1000,0.001];
+%     options=optimset('disp','iter','LargeScale','off','TolFun',.001,'MaxIter',100000000000,'MaxFunEvals',100000000000)
+%     %options=optimset('disp','iter','LargeScale','off','TolFun',.001,'MaxIter',100000,'MaxFunEvals',100000);
+%     [z,resnorm,~,exitflag,output] = nlinfit(calcMeanMSD(f(fearly),1),...
+%         calcMeanMSD(f(fearly),2),F3,z0);
+%     disp(exitflag)
+%     disp(output)
+%     z
+
+    problem = createOptimProblem('lsqcurvefit','x0',z0,'objective',F3,...
+            'xdata',calcMeanMSD(f(fearly),1),'ydata',calcMeanMSD(f(fearly),2));
+        
+        ms = MultiStart('PlotFcns',@gsplotbestf);
+        [xmulti,errormulti] = run(ms,problem,2000);
+        meanres = sum((mean(calcMeanMSD(f(fearly),2))-calcMeanMSD(f(fearly),2)).^2);
+        rsquare = 1-(errormulti/meanres);
+        x = xmulti;
     
     % plot power law for comparison, offset for clarity
     plot(calcMeanMSD(f(fearly),1),...
@@ -178,6 +190,8 @@ for condnum = 1:numel(AssayOHT);
     ylabel('MSD (\mum^2)')
     grid on
     xlim([0.8 20])
+    
+    x10 = 1:0.01:10
 end
 
 toc
