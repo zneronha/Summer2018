@@ -51,11 +51,22 @@ for i = 1:length(FileNames)
     maxTime = size(storeX,2);
     
     % calculate speeds
+%     velX=(storeX(:,(1+TimeWindow):1:end)-...
+%             storeX(:,1:1:end-TimeWindow));
+%      
+%     velY=(storeY(:,(1+TimeWindow):1:end)-...
+%             storeY(:,1:1:end-TimeWindow));
     velX=4*(storeX(:,(1+TimeWindow):1:end)-...
             storeX(:,1:1:end-TimeWindow));
      
     velY=4*(storeY(:,(1+TimeWindow):1:end)-...
             storeY(:,1:1:end-TimeWindow));
+    if size(velX,2)+1==size(storeX,2)
+    else
+        a239 = 3;
+    end
+    
+
     
     velR = sqrt(velX.*velX + velY.*velY);
             
@@ -122,8 +133,8 @@ condition77{4,1} = RepMat;
     
     ConditionNameMat = {'OHT1000','DMSO1000','OHT500','DMSO500'};
     for totalcounter = 1:numel(condition77)
-        close all
-        %figure;
+        %close all
+        figure;
     RepMat = condition77{totalcounter,1};
     
     mycounter = 0;
@@ -152,7 +163,7 @@ condition77{4,1} = RepMat;
                timeindex = storeCellInfo(index).TimeIndex;
                
                cellvel3 = storeCellInfo(index).velR;
-              cellvel3=nanmean(cellvel3,1);
+               cellvel3=nanmean(cellvel3,1);
                velstore = [velstore;cellvel3];
 
               conditionstore = [conditionstore;normcellcount3];
@@ -179,7 +190,7 @@ condition77{4,1} = RepMat;
             abc.LineWidth = 1.5;
             box on
             ylim([0 54])            
-            xlim([0 62])
+            xlim([0 62*4/TimeWindow])
             xlabel('Time (h)','fontsize',9)
             %set(gca,'Ytick',0:2.5:15)
             ylabel('Cell Speed (um/h)','fontsize',9)

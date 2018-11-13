@@ -1,0 +1,21 @@
+function PlotTrajec
+%Purpose: plot trajectories for cells to verify "randomness"
+
+cmap = cbrewer('qual','Set1',8);
+AssayOHT = [51 54 57 60];
+wellnum = 54;
+
+%load the data
+tempName = strcat('EGF(E6)w',num2str(wellnum),'.mat');
+load(tempName);
+
+for ii = 1:size(storeX,1)
+    g1 = storeX(ii,:)-storeX(1,1);
+    
+    
+end
+
+
+
+
+end
