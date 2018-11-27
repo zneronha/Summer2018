@@ -8,7 +8,7 @@ function plotspeed_shaderr_PVALrollingSepCRV_AGM
 % clean up workspace
 clc; close all;
 
-FramesToHours = 8;
+for FramesToHours = [1 2 4 8]
 TimeWindow = FramesToHours; % analyze this frequently (i.e. hours)
 ImageArea = .900*.900; % mm^2
 % FigNameDMSO='DMSO 1000c ProlifPlot E18';
@@ -132,9 +132,9 @@ condition77{4,1} = RepMat;
     
     
     ConditionNameMat = {'OHT1000','DMSO1000','OHT500','DMSO500'};
-    for totalcounter = 1:numel(condition77)
+    for totalcounter = 1
         %close all
-        figure;
+        %figure;
     RepMat = condition77{totalcounter,1};
     
     mycounter = 0;
@@ -268,7 +268,7 @@ title(strcat('',{' '},ConditionNameMat(totalcounter)),'fontsize',11);
 % %     P=plot(t7,t8);
 % %     set(P,'color',[0.5 0.5 0.5],'LineStyle','--','linewidth',1.5);
 %     plot(x1,ones(1,size(x1,2)).*0.5*4,'^','MarkerSize',2,'color','k');
-    plot(x3,x3.*0-2,'.','MarkerSize',7,'color','k');
+%     plot(x3,x3.*0-2,'.','MarkerSize',7,'color','k');
 %     plot(x3,ones(1,size(x3,2)).*-0.5*4,'o','MarkerSize',2,'color','k');
     
 %     xlswrite(char(strcat('Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\Updated Graphics (6-30)\Proliferation Plots\PValVel63018GFGM',ConditionNameMat(totalcounter))),SignificanceStore);
@@ -283,10 +283,12 @@ title(strcat('',{' '},ConditionNameMat(totalcounter)),'fontsize',11);
          ax = gca;
          ax.LineWidth = 1;
          set(gcf, 'PaperPosition', [0 0 6.2 10.57]);
-         saveas(gcf,figname,'epsc');
-         print('-dtiff','-r1000',figname)
+         %saveas(gcf,figname,'epsc');
+         %print('-dtiff','-r1000',figname)
+         hold on
              
     end
+end
 end
 
    
