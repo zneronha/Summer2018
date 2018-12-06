@@ -1,3 +1,4 @@
+function MSDbreakdowncutoff
 %% calculate MSD from only individual cells at early times
 
 % cleanup
@@ -37,7 +38,7 @@ CellDens = [1000];
 plotCount = 1;
 
 % for the selected number of conditions
-for condnum = 1:numel(AssayOHT);
+for condnum = 1:numel(AssayOHT)
     
     % pick out well #
     wellnum = AssayOHT(condnum);
@@ -95,16 +96,28 @@ for condnum = 1:numel(AssayOHT);
     end
     
     % find rows corresponding to individuals at short times
-    [row, col] = find(storeNeighbors(:,1:24) == 0);
+    [row, col] = find(storeNeighbors(:,1:(10*4)) > -1);
     
     % pull out unique cell IDs
-    IndList = unique(row);
+    IndList = unique(row); %all the rows that are individuals at an early timepoint
     
+    sumcount61 = 0;
+    MyList = []; 
+    for k6 = 1:numel(IndList)
+       jsum = sum(row==IndList(k6)); 
+       if jsum>-1
+           MyList = [MyList,IndList(k6)];
+           sumcount61 = sumcount61+1;
+       end
+        
+    end
+    fprintf('There are %d cells tracked\n',sumcount61)
+    IndList = MyList;
     % preallocate cell for MSD analysis
     tracks = cell(length(IndList),1);
     
     % add each cell ID as a unique cell to tracks
-    for ID = 1:length(IndList)
+    for ID = 1:length(IndList) %for each cellID
         
         % make sure cell is present
         fPresent = find(~isnan(storeX(IndList(ID),:)));
@@ -119,6 +132,32 @@ for condnum = 1:numel(AssayOHT);
     
     % cleanup and remove empty cells
     tracks = tracks(~cellfun(@isempty,tracks));
+    
+%     for jj = 1:numel(tracks)
+%         practicetracks = {tracks{jj}};
+%         % set msd analyzer to microns and hours
+%         ma = msdanalyzer(2,'um','h');
+% 
+%         % run msdanalyzer on tracks
+%         ma = ma.addAll(practicetracks);
+% 
+%         % calculate MSD info
+%         allMSD = ma.computeMSD;
+%         calcMSD = allMSD.msd; % pull out MSD info for analysis
+% 
+%         % calculate ensemble averaged MSD
+%         calcMeanMSD = ma.getMeanMSD(1:length(practicetracks));
+% 
+%         % start sampling at 1 h, due to nuclear deformation
+%         f = find(calcMeanMSD(:,1) >= 1);
+% 
+%         % pull out MSD values below 10 h
+%         fearly = find(calcMeanMSD(f,1) <= 10);
+%         
+%         plot(calcMeanMSD(f(fearly),1),calcMeanMSD(f(fearly),2),'color',cmap(2,:))
+%         hold on
+%         
+%     end
     
     % set msd analyzer to microns and hours
     ma = msdanalyzer(2,'um','h');
@@ -137,25 +176,23 @@ for condnum = 1:numel(AssayOHT);
     f = find(calcMeanMSD(:,1) >= 1);
     
     
-    % pull out MSD values below 30 h
-    fearly = find(calcMeanMSD(f,1) <= 30);
+    % pull out MSD values below 10 h
+    fearly = find(calcMeanMSD(f,1) <= 10);
       
     % note this is standard error of the mean
     errorbar(calcMeanMSD(f(fearly),1),calcMeanMSD(f(fearly),2),...
         calcMeanMSD(f(fearly),3)./sqrt(calcMeanMSD(f(fearly),4)),'o-',...
-        'Color',cmap(plotCount+4,:),...
+        'Color',cmap(plotCount+1,:),...
         'Linewidth',2); hold on
-    
-    % fit MSD values below 10 h
-    fearly = find(calcMeanMSD(f,1) <= 10);
+  
         
     % fit to power law
     fitD = fit(calcMeanMSD(f(fearly),1),...
         calcMeanMSD(f(fearly),2),'power1')
     
-    %fit to biased diffusion model...
-    F3 = @(z,tdat)z(1)*((z(2)*tdat)-(z(2)^2)*(1-exp(-tdat/z(2))));
-    z0 = [1000,0.001];
+%     %fit to biased diffusion model...
+%     F3 = @(z,tdat)z(1)*((z(2)*tdat)-(z(2)^2)*(1-exp(-tdat/z(2))));
+%     z0 = [1000,0.001];
 %     options=optimset('disp','iter','LargeScale','off','TolFun',.001,'MaxIter',100000000000,'MaxFunEvals',100000000000)
 %     %options=optimset('disp','iter','LargeScale','off','TolFun',.001,'MaxIter',100000,'MaxFunEvals',100000);
 %     [z,resnorm,~,exitflag,output] = nlinfit(calcMeanMSD(f(fearly),1),...
@@ -164,14 +201,14 @@ for condnum = 1:numel(AssayOHT);
 %     disp(output)
 %     z
 
-    problem = createOptimProblem('lsqcurvefit','x0',z0,'objective',F3,...
-            'xdata',calcMeanMSD(f(fearly),1),'ydata',calcMeanMSD(f(fearly),2));
-        
-        ms = MultiStart('PlotFcns',@gsplotbestf);
-        [xmulti,errormulti] = run(ms,problem,2000);
-        meanres = sum((mean(calcMeanMSD(f(fearly),2))-calcMeanMSD(f(fearly),2)).^2);
-        rsquare = 1-(errormulti/meanres);
-        x = xmulti;
+%     problem = createOptimProblem('lsqcurvefit','x0',z0,'objective',F3,...
+%             'xdata',calcMeanMSD(f(fearly),1),'ydata',calcMeanMSD(f(fearly),2));
+%         
+%         ms = MultiStart('PlotFcns',@gsplotbestf);
+%         [xmulti,errormulti] = run(ms,problem,2000);
+%         meanres = sum((mean(calcMeanMSD(f(fearly),2))-calcMeanMSD(f(fearly),2)).^2);
+%         rsquare = 1-(errormulti/meanres);
+%         x = xmulti;
     
     % plot power law for comparison, offset for clarity
     plot(calcMeanMSD(f(fearly),1),...
@@ -190,7 +227,11 @@ for condnum = 1:numel(AssayOHT);
     ylabel('MSD (\mum^2)')
     grid on
     xlim([0.8 20])
-   
+%     
+    figname = 'Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\MSD replot\GraphicTest\Testall10cutoff_w54';
+    saveas(gcf,figname,'epsc');
+    print('-dtiff','-r1000',figname)
 end
 
 toc
+end

@@ -109,13 +109,14 @@ powerFit = (f.a).*X.^(f.b);
 plot(X,powerFit,'k-','Linewidth',2);
 
 %Plot bars on this function using the previous function with transparency
-q3 = confint(f)
-powerFitmax = (q3(2,1)).*X.^(q3(2,2));
-plot(X,powerFitmax,'b-','Linewidth',2);
-powerFitmin = (q3(1,1)).*X.^(q3(1,2));
-plot(X,powerFitmin,'b-','Linewidth',2);
+%values from R
+q3 = confint(f);
+powerFitmax = (17.3295).*X.^(0.5824);
+plot(X,powerFitmax,'k-','Linewidth',2);
+powerFitmin = (16.6303).*X.^(0.5688);
+plot(X,powerFitmin,'k-','Linewidth',2);
 
-%Plot fractal dimension of 1.5 & 2
+%Plot fractal dimension of 1.6 & 1.8
 powerFit15 = (f.a).*X.^((1/1.5));
 powerFit20 = (f.a).*X.^((1/2));
 plot(X,powerFit15,'r-','Linewidth',2);
@@ -132,5 +133,6 @@ grid off
             set(gcf, 'PaperUnits', 'centimeters');
             set(gcf, 'PaperPosition', [0 0 10 7.5])
 title('Fractal Dimension: DMSO low EGF 51 54 64 61','FontSize',10);
-figname='2d Fractal Dimension: OHT densities';
-% saveas(gcf,figname,'epsc');
+figname='C:\Users\zjner\GitHub\Summer2018\MostRecentFractal\BootstrapFD_OHTdensities';
+saveas(gcf,figname,'epsc');
+print('-dtiff','-r1000',figname)

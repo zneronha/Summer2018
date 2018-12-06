@@ -1,3 +1,4 @@
+function MSDbreakdown&cutoff.m
 %% calculate MSD from only individual cells at early times
 
 % cleanup
@@ -226,8 +227,9 @@ for condnum = 1:numel(AssayOHT)
     xlim([0.8 20])
 %     
     figname = 'Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\MSD replot\GraphicTest\Test2HrCtF54';
-    saveas(gcf,figname,'epsc');
-    print('-dtiff','-r1000',figname)
+    %saveas(gcf,figname,'epsc');
+    %print('-dtiff','-r1000',figname)
 end
 
 toc
+end
