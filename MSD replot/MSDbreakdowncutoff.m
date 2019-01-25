@@ -96,16 +96,65 @@ for condnum = 1:numel(AssayOHT)
     end
     
     % find rows corresponding to individuals at short times
-    [row, col] = find(storeNeighbors(:,1:(10*4)) > -1);
+    [row, col] = find(storeNeighbors(:,1:(10*8))==0);
     
     % pull out unique cell IDs
     IndList = unique(row); %all the rows that are individuals at an early timepoint
+    
+%     %Kill switch implemenentaiton begins here
+%     IndCol = [];
+%     
+%     %pull out first occurance of single cell behavior:
+%     for j = IndList'
+%        ix3 = row == j;
+%        relCol = col(ix3);
+%        sp1 = min(relCol);
+%        IndCol = [IndCol; sp1];
+%         
+%     end
+%     
+%     Ax3 = [IndList IndCol];
+%     %now find where neighbors are found
+%     [row1, col1] = find(storeNeighbors(:,1:(10*8))>0);
+%         % pull out unique cell IDs
+%     IndList1 = unique(row1); %all the rows that are individuals at an early timepoint
+%     
+%     IndCol1 = [];
+%     
+%     %pull out first occurance of single cell behavior:
+%     for j = IndList1'
+%        ix31 = row1 == j;
+%        relCol1 = col1(ix31);
+%        sp11 = min(relCol1);
+%        IndCol1 = [IndCol1; sp11];
+%     end
+%     
+%     Ax4 = [IndList1 IndCol1];
+%     uniquCol = unique(Ax4(:,1));
+%     ismem = ismember(uniquCol,Ax3(:,1));
+%     Ax4 = Ax4(ismem,:); 
+%     
+%     for q = 1:size(Ax3,1)
+%        numCell = Ax3(q,1);
+%        det1 = numCell == Ax4(:,1);
+%        if sum(det1) == 0
+%        else
+%            if Ax3(q,2)>Ax4(det1,2)
+%               Ax3(q,:) = NaN; 
+%            end
+%            
+%        end
+%        
+%         
+%     end
+%     
+%     %Kill switch implementaiton ends here
     
     sumcount61 = 0;
     MyList = []; 
     for k6 = 1:numel(IndList)
        jsum = sum(row==IndList(k6)); 
-       if jsum>-1
+       if jsum>3*4
            MyList = [MyList,IndList(k6)];
            sumcount61 = sumcount61+1;
        end
@@ -133,32 +182,32 @@ for condnum = 1:numel(AssayOHT)
     % cleanup and remove empty cells
     tracks = tracks(~cellfun(@isempty,tracks));
     
-%     for jj = 1:numel(tracks)
-%         practicetracks = {tracks{jj}};
-%         % set msd analyzer to microns and hours
-%         ma = msdanalyzer(2,'um','h');
-% 
-%         % run msdanalyzer on tracks
-%         ma = ma.addAll(practicetracks);
-% 
-%         % calculate MSD info
-%         allMSD = ma.computeMSD;
-%         calcMSD = allMSD.msd; % pull out MSD info for analysis
-% 
-%         % calculate ensemble averaged MSD
-%         calcMeanMSD = ma.getMeanMSD(1:length(practicetracks));
-% 
-%         % start sampling at 1 h, due to nuclear deformation
-%         f = find(calcMeanMSD(:,1) >= 1);
-% 
-%         % pull out MSD values below 10 h
-%         fearly = find(calcMeanMSD(f,1) <= 10);
-%         
-%         plot(calcMeanMSD(f(fearly),1),calcMeanMSD(f(fearly),2),'color',cmap(2,:))
-%         hold on
-%         
-%     end
-    
+    for jj = 1:numel(tracks)
+        practicetracks = {tracks{jj}};
+        % set msd analyzer to microns and hours
+        ma = msdanalyzer(2,'um','h');
+
+        % run msdanalyzer on tracks
+        ma = ma.addAll(practicetracks);
+
+        % calculate MSD info
+        allMSD = ma.computeMSD;
+        calcMSD = allMSD.msd; % pull out MSD info for analysis
+
+        % calculate ensemble averaged MSD
+        calcMeanMSD = ma.getMeanMSD(1:length(practicetracks));
+
+        % start sampling at 1 h, due to nuclear deformation
+        f = find(calcMeanMSD(:,1) >= 1);
+
+        % pull out MSD values below 10 h
+        fearly = find(calcMeanMSD(f,1) <= 10);
+        
+        plot(calcMeanMSD(f(fearly),1),calcMeanMSD(f(fearly),2),'color',cmap(2,:))
+        hold on
+        
+    end
+    figure;
     % set msd analyzer to microns and hours
     ma = msdanalyzer(2,'um','h');
     

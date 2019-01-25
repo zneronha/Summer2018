@@ -88,6 +88,11 @@ for i = 1:length(FileNames)
     disp(FileNames{i})
 end
 
+cmap = cbrewer('qual','Dark2',5); 
+cmap1 = cbrewer('seq','BuPu',20);
+cmap2 = cbrewer('seq','Oranges',20);
+cmap1 = cmap1([7,10,14,18],:);
+cmap2 = cmap2([7,10,14,18],:);
 storeGMOHTCellCount = [];
 storeGMOHTTime = [];
 storeAssayOHTCellCount = [];
@@ -180,7 +185,7 @@ condition77{4,1} = RepMat;
        
 
          storeVelData3{uu} = velstore;       
-         cmap = cbrewer('qual','Dark2',5); 
+
 %         cmap = cbrewer('qual','Set1',2);
         subplot(2,1,1)
         if mycounter == 1

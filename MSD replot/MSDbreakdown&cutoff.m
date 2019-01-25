@@ -1,4 +1,4 @@
-function MSDbreakdown&cutoff.m
+function MSDbreakdown&cutoff
 %% calculate MSD from only individual cells at early times
 
 % cleanup

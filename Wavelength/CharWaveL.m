@@ -5,11 +5,14 @@ function CluLeaderScatterE12RadGYR070218
 %Updated on 14 June for log log plotting equal 
 %Updated on 2 July to comptue the radius of Gyration too
 
+%to change between E6 and E12 change: wells, load path, ws modifier
+
 %cleanup
 clearvars; close all; clc
 
 %define replicates horizontally and conditions vertically
-wells = [57 58; 9 10];
+%wells = [57 58; 9 10];
+wells = [6 19; 54 67];
 
 %allocate data storage
 storedata4 = cell(2,2);
@@ -31,7 +34,9 @@ for u2 = 1:size(wells,1)
         storedata3 = []; %#ok<NASGU>
         
         %load the leader data
-        load('Z:\ENG_BBCancer_Shared\group\0Zach\Leader Data\TriLeaderData31418\DataProcessing060418\EGF(E12)_Thr1.compiledleaderdata060418.mat',...
+        %load('Z:\ENG_BBCancer_Shared\group\0Zach\Leader Data\TriLeaderData31418\DataProcessing060418\EGF(E12)_Thr1.compiledleaderdata060418.mat',...
+        %    'CompiledDataStore');
+        load('Z:\ENG_BBCancer_Shared\group\0Zach\Leader Data\TriLeaderData31418\DataProcessing031518\EGF(E6)_Thr1.compiledleaderdata031518.mat',...
             'CompiledDataStore');
 
         %get to the appropriate well's leader data
@@ -41,7 +46,8 @@ for u2 = 1:size(wells,1)
         framenum = size(leaderdata,2);
         
         %load the appropriate well
-        ws = strcat('12',num2str(well));
+        %ws = strcat('12',num2str(well));
+        ws = strcat('',num2str(well));
         
         %load the position data for this well
         load(strcat('Z:\ENG_BBCancer_Shared\group\0Zach\EGFReplicateData\EGF(E6)w',...
@@ -165,7 +171,7 @@ AssayDMSO = AssayDMSO(AssayDMSO(:,2)>0,:);
 AssayOHT = AssayOHT(AssayOHT(:,2)>0,:);
 
 
-AssayOHT(:,4) = AssayOHT(:,4)./50;
+% AssayOHT(:,4) = AssayOHT(:,4)./50;
 % 
 % %make sure offsetting is consistant across log axes 
 % AssayDMSO(:,2) = AssayDMSO(:,2)+
@@ -207,7 +213,7 @@ set(gca, 'YScale', 'lin')
 %ylim([0.8 20]); 
 %xlim([2 500]);
 legend({'Assay OHT'},'location','nw')
-xlabel('Cell Lengths')
+xlabel('Cluster Radius of Gyration')
 ylabel('Number of Leaders Identified')
 % legend('Assay DMSO','Assay DMSO','Assay OHT','Assay OHT','location','nw')
 % xlabel('Time (hours)')
@@ -223,9 +229,9 @@ set(gca,'fontsize',10);
 set(gcf, 'PaperUnits', 'centimeters');
 set(gcf, 'PaperPosition', [0 0 10 7.5])
 title('Fractal Dimension: OHT low EGF','FontSize',10);
-% figname=strcat('Z:\ENG_BBCancer_Shared\group\0Zach\Summer 2018\Updated Graphics (6-30)\ClusterSizeNumLeader070218');
-% saveas(gcf,figname,'epsc');
-% print('-dtiff','-r1000',figname)
+figname=strcat('C:\Users\zjner\GitHub\Summer2018\Wavelength\ClusterSizeNumLeader121818');
+saveas(gcf,strcat(figname,'.pdf'))
+print('-dtiff','-r1000',figname)
 end
 
 function [RadGyr] = ROG(Data)
