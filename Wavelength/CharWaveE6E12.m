@@ -1,4 +1,4 @@
-function CluLeaderScatterE12RadGYR070218
+function CharWaveE6E12
 %31 May 2018 <Zachary_Neronha@brown.edu> 
 %this code creates a scatter plot of clusters and number of leaders
 %Updated on 6 June for some improvements and curve fitting
@@ -39,7 +39,7 @@ for u2 = 1:size(wells,1)
             'CompiledDataStore');
             ww = num2str(well);
             wellc = ww(3:end);
-            wellc = str2num(wellc);
+            wellc = str2double(wellc);
         else
         load('Z:\ENG_BBCancer_Shared\group\0Zach\Leader Data\TriLeaderData31418\DataProcessing031518\EGF(E6)_Thr1.compiledleaderdata031518.mat',...
             'CompiledDataStore');
@@ -232,11 +232,13 @@ box on
 grid off
 ax.XColor='black';
 ax.YColor='black';
-set(gca,'fontsize',10);
+set(gca,'fontsize',8);
+set(gca,'XMinorTick','off','YMinorTick','off')
 set(gcf, 'PaperUnits', 'centimeters');
 set(gcf, 'PaperPosition', [0 0 10 7.5])
+
 title('Fractal Dimension: OHT low EGF','FontSize',10);
-figname=strcat('C:\Users\zjner\GitHub\Summer2018\Wavelength\ClusterSizeNumLeader121818');
+figname=strcat('C:\Users\zjner\GitHub\Summer2018\Wavelength\ClusterSizeNumLeader122519');
 saveas(gcf,strcat(figname,'.pdf'))
 print('-dtiff','-r1000',figname)
 end
@@ -254,8 +256,7 @@ SumVect = sum(MSS);
 xx = SumVect./size(Data(:,1),1);
 RadGyr = sqrt(xx);
 
-  end
-
+end
 
 function [clustercellcount, singlecellcount, numCLU,clusterlist] =...
     WebPlotProxSearch2(storeX,storeY,frame,cluster_definition)
